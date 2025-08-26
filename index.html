@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Beatriz Gascón Lourenço - Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --rail: 36px;               /* ribbon height */
+      --headerh: 0px;             /* reserved; not used now */
+      --ink: #FFE7D6;
+      --bg: #3d1900;
+      --tile: #A34400;
+      --tileHover: #CC5500;
+    }
+
+    *{box-sizing:border-box;margin:0}
+    html,body{height:100%}
+    body{
+      font-family:'Space Grotesk',sans-serif;
+      background: linear-gradient(135deg, var(--bg) 0%, var(--bg) 100%);
+      color: var(--ink);
+      padding-top: calc(var(--rail) + var(--headerh)); /* space for top ribbon */
+      padding-bottom: var(--rail);                     /* space for bottom ribbon */
+      overflow-x: hidden;
+    }
+
+    /* ---------- RIBBONS ---------- */
+    .ribbon{
+      position:fixed; left:0; right:0; height:var(--rail);
+      background: var(--bg);
+      border-top: 2px solid var(--ink);
+      border-bottom: 2px solid var(--ink);
+      overflow:hidden; z-index:1000;
+    }
+    .ribbon.top{ top:0; }
+    .ribbon.bottom{ bottom:0; }
+    .ribbon .track{
+      position:absolute; left:0; top:50%; transform:translateY(-50%);
+      display:flex; gap:28px; white-space:nowrap; padding-inline:24px;
+      animation: scroll-x 30s linear infinite;
+      will-change: transform;
+      color: var(--ink);
+      font-weight:600; letter-spacing:.12em; text-transform:uppercase;
+      font-size:.8rem;
+    }
+    @keyframes scroll-x{
+      from{ transform: translateX(0) translateY(-50%); }
+      to  { transform: translateX(-50%) translateY(-50%); }
+    }
+
+    /* ---------- MOSAIC fills remaining viewport ---------- */
+    .wrap{
+      height: calc(100vh - var(--rail) - var(--rail) - var(--headerh));
+      width: 100vw;
+      display: grid;
+      place-items: center;
+    }
+
+    .mosaic{
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      border: 2px solid var(--ink);
+      display: grid;
+      grid-template-columns: var(--colA,1fr) var(--colB,1fr);
+      grid-template-rows: var(--rowA,1fr) var(--rowB,1fr);
+      transition: grid-template-columns .45s ease, grid-template-rows .45s ease;
+      isolation:isolate;
+      position: relative; /* for center chip positioning */
+    }
+
+    .tile{
+      border: 2px solid var(--ink); border-left:none; border-top:none;
+      background: var(--tile);
+      color: var(--ink);
+      display:flex; align-items:center; justify-content:center;
+      text-transform:uppercase; font-weight:600; letter-spacing:2px;
+      font-size: clamp(1.2rem, 2vw, 2rem);
+      cursor:pointer; position:relative; overflow:hidden;
+    }
+    .tile::before{
+      content:""; position:absolute; inset:0;
+      background: rgba(255,231,214,.06);
+      transform: translateX(-100%); transition: transform .3s ease;
+      pointer-events:none;
+    }
+    .tile:hover::before{ transform: translateX(0); }
+    .tile:hover{ background: var(--tileHover); }
+
+    /* hover-resize rules */
+    .mosaic:has(.experience:hover){ --colA:2fr; --colB:1fr; --rowA:2fr; --rowB:1fr; }
+    .mosaic:has(.projects:hover){   --colA:1fr; --colB:2fr; --rowA:2fr; --rowB:1fr; }
+    .mosaic:has(.connect:hover){    --colA:2fr; --colB:1fr; --rowA:1fr; --rowB:2fr; }
+    .mosaic:has(.about:hover){      --colA:1fr; --colB:2fr; --rowA:1fr; --rowB:2fr; }
+
+    /* ---------- CENTER CHIP (header text) ---------- */
+    .center-chip{
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
+      background: var(--tileHover);          
+      color: var(--ink);
+      border: 2px solid var(--ink);
+      box-shadow: 6px 6px 0 var(--ink);
+      padding: 10px 16px;
+      text-align: center;
+      min-width: 240px;
+      max-width: min(70vw, 540px);
+      z-index: 20;
+      pointer-events: none;             
+    }
+    .chip-name{ font-weight: 600; letter-spacing:.04em; font-size: clamp(1rem, 2vw, 1.25rem); }
+    .chip-title{ opacity:.95; margin-top: 4px; font-size: clamp(.85rem, 1.6vw, 1rem); letter-spacing:.06em; }
+
+    /* touch fallback */
+    @media (hover:none){
+      .mosaic.has-active.experience{ --colA:2fr; --colB:1fr; --rowA:2fr; --rowB:1fr; }
+      .mosaic.has-active.projects{   --colA:1fr; --colB:2fr; --rowA:2fr; --rowB:1fr; }
+      .mosaic.has-active.connect{    --colA:2fr; --colB:1fr; --rowA:1fr; --rowB:2fr; }
+      .mosaic.has-active.about{      --colA:1fr; --colB:2fr; --rowA:1fr; --rowB:2fr; }
+      .tile.active{ background: var(--tileHover); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP ribbon -->
+  <div class="ribbon top" aria-hidden="true">
+    <div class="track">
+      Git × Business Intelligence × Machine Learning × GCP × Azure × Statistics × CLI tooling × Tableau × Power BI × SQL × Python × Data Visualization ×
+    </div>
+  </div>
+
+  <div class="wrap">
+    <main class="mosaic" id="mosaic">
+      <!-- centered header chip -->
+      <div class="center-chip" aria-hidden="true">
+        <div class="chip-name">Beatriz Gascón Lourenço</div>
+        <div class="chip-title">Data Analyst II</div>
+      </div>
+
+      <a class="tile experience">Experience</a>
+      <a class="tile projects">Projects</a>
+      <a class="tile connect">Connect</a>
+      <a class="tile about">About</a>
+    </main>
+  </div>
+
+  <!-- Bottom ribbon -->
+  <div class="ribbon bottom" aria-hidden="true">
+    <div class="track">
+      Git × Business Intelligence × Machine Learning × GCP × Azure × Statistics × CLI tooling × Tableau × Power BI × SQL × Python × Data Visualization ×
+    </div>
+  </div>
+
+  <script>
+    document.querySelectorAll('.ribbon .track').forEach(t => t.innerHTML += t.innerHTML);
+
+    if (matchMedia('(hover:none)').matches){
+      const board = document.getElementById('mosaic');
+      const tiles = [...board.querySelectorAll('.tile')];
+      const classes = ['experience','projects','connect','about'];
+      const clear = () => {
+        tiles.forEach(t => t.classList.remove('active'));
+        board.classList.remove('has-active', ...classes);
+      };
+      tiles.forEach(t => {
+        t.addEventListener('click', e => {
+          e.preventDefault();
+          if(t.classList.contains('active')){ clear(); return; }
+          clear();
+          t.classList.add('active');
+          const name = classes.find(c => t.classList.contains(c));
+          board.classList.add('has-active', name);
+        });
+      });
+    }
+  </script>
+</body>
+</html>
